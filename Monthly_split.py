@@ -52,6 +52,9 @@ data.columns = data.columns.str.strip()
 # %%
 data.columns
 
+# %% [markdown]
+# #### This import function is useful to analyse the data
+
 # %%
 # from pivottablejs import pivot_ui
 # pivot_ui(data)

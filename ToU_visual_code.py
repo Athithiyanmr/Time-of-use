@@ -52,7 +52,7 @@ data["Others"] = data["Total_energy_load"] - data["Domestic"] - data["Industrial
 # %%
 
 # %%
-new_order = ["timestamp","Date","Time","Total_energy_load","Solar_load","Wind_load","Net_load","Domestic","Industrial","Commercial","Agriculture","Others"]
+new_order = ["timestamp","Date","Time","Month","Total_energy_load","Solar_load","Wind_load","Net_load","Domestic","Industrial","Commercial","Agriculture","Others"]
 data = data.reindex(new_order, axis=1)
 
 # %%
@@ -133,5 +133,69 @@ plt.legend(loc="best")
 plt.style.use("ggplot")
 # plt.savefig("new",dpi=1500)
 plt.show()
+
+# %%
+# data.set_index("timestamp",inplace =True)
+
+# %%
+# January = data["2021-01-01 00:00:00 ": "2021-01-31 23:00:00"]
+
+# %%
+# January.reset_index(inplace = True)
+
+# %%
+# plt.plot(January["timestamp"],January["Total_energy_load"],color ="black",label ="Total_Load")
+# plt.stackplot(January["timestamp"],January["Domestic"], January["Industrial"], January["Commercial"],January["Agriculture"],January["Others"],
+#               colors =['yellow', 'green','skyblue','orange','red'],alpha =0.5)
+
+# plt.plot(January["timestamp"],January["Wind_load"],'--'  ,color ="navy",label ="Wind_load")
+# plt.plot(January["timestamp"],January["Solar_load"],'--',color ="red",label ="Solar_load")
+# plt.plot([], [], color ='yellow',
+#          label ='Domestic')
+# plt.plot([], [], color ='green',
+#          label ='Industrial')
+# plt.plot([], [], color ='skyblue',
+#          label ='Commercial')
+# plt.plot([], [], color ='orange',
+#          label ='Agriculture')
+# plt.plot([], [], color ='red',
+#          label ='Others')
+# plt.ylim(0,20000)
+# # plt.xlim(January['timestamp'][0],January['timestamp'][23])
+# plt.title("Jan 15th")
+# plt.rcParams['figure.figsize'] = [18, 6]
+# plt.xlabel("Hour")
+# plt.ylabel("Load (MW)")
+# plt.tight_layout()
+# plt.legend(loc="best")
+# plt.style.use("ggplot")
+# # plt.savefig("new",dpi=1500)
+# plt.show()
+
+# %%
+
+# %%
+data.columns
+
+# %%
+# df2 = data.loc[data.groupby(['timestamp', 'Month'])['Total_energy_load'].idxmax()]
+
+# %%
+
+# %%
+data.reset_index(inplace = True)
+
+# %%
+data.groupby(["Month","Date"])["Total_energy_load"].max()
+
+# %%
+data.groupby(["Month"])["Total_energy_load"].agg(["min","max"])
+
+# %%
+
+# %%
+# month = np.where(data["Month"]==1)
+
+# %%
 
 # %%

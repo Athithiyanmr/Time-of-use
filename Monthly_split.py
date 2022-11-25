@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.14.1
+#       jupytext_version: 1.14.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -23,6 +23,9 @@ import matplotlib.pyplot as plt
 
 # %%
 pd.plotting.register_matplotlib_converters()
+
+# %%
+#  pip install openpyxl
 
 # %%
 data = pd.read_excel("D:/TOU/220802 State load profile.xlsx",sheet_name=4)
@@ -42,6 +45,7 @@ data_details(data)
 # %%
 data['Date'] = pd.to_datetime(data['timestamp']).dt.date
 data['Time'] = pd.to_datetime(data['timestamp']).dt.time
+data['Month'] = pd.to_datetime(data['timestamp']).dt.month
 
 # %%
 data.columns
@@ -61,28 +65,47 @@ data.columns
 
 
 # %%
-maximum = data["Average energy load"].max()
+maximum = data["Total_energy_load"].max()
 
 # %%
-minimum = data["Average energy load"].min()
+minimum = data["Total_energy_load"].min()
 
 # %%
 x = (maximum- minimum)/10
 
 # %%
-a= data[(data["Average energy load"] >= minimum) & (data["Average energy load"] <= minimum + x)] 
-b= data[(data["Average energy load"] > minimum + x) & (data["Average energy load"] <= minimum +(2*x))]
-c= data[(data["Average energy load"] > minimum +(2*x)) & (data["Average energy load"] <= minimum +(3*x))]
-d = data[(data["Average energy load"] > minimum +(3*x)) & (data["Average energy load"] <= minimum +(4*x))]
-e = data[(data["Average energy load"] > minimum +(4*x)) & (data["Average energy load"] <= minimum +(5*x))]
-f = data[(data["Average energy load"] > minimum +(5*x)) & (data["Average energy load"] <= minimum +(6*x))]
-g = data[(data["Average energy load"] > minimum +(6*x)) & (data["Average energy load"] <= minimum +(7*x))]
-h = data[(data["Average energy load"]> minimum +(7*x) ) & (data["Average energy load"] <= minimum +(8*x))]
-i = data[(data["Average energy load"] > minimum +(8*x)) & (data["Average energy load"] <= minimum +(9*x))]
-j = data[(data["Average energy load"] > minimum +(9*x)) & (data["Average energy load"] <= maximum )]
+a= data[(data["Total_energy_load"] >= minimum) & (data["Total_energy_load"] <= minimum + x)] 
+b= data[(data["Total_energy_load"] > minimum + x) & (data["Total_energy_load"] <= minimum +(2*x))]
+c= data[(data["Total_energy_load"] > minimum +(2*x)) & (data["Total_energy_load"] <= minimum +(3*x))]
+d = data[(data["Total_energy_load"] > minimum +(3*x)) & (data["Total_energy_load"] <= minimum +(4*x))]
+e = data[(data["Total_energy_load"] > minimum +(4*x)) & (data["Total_energy_load"] <= minimum +(5*x))]
+f = data[(data["Total_energy_load"] > minimum +(5*x)) & (data["Total_energy_load"] <= minimum +(6*x))]
+g = data[(data["Total_energy_load"] > minimum +(6*x)) & (data["Total_energy_load"] <= minimum +(7*x))]
+h = data[(data["Total_energy_load"]> minimum +(7*x) ) & (data["Total_energy_load"] <= minimum +(8*x))]
+i = data[(data["Total_energy_load"] > minimum +(8*x)) & (data["Total_energy_load"] <= minimum +(9*x))]
+j = data[(data["Total_energy_load"] > minimum +(9*x)) & (data["Total_energy_load"] <= maximum )]
 
 # %% [markdown]
 # ### Exporting the splitted values (excel format in a single workbook)
+
+# %%
+z =[a,b,c,d,e,f,g,h,i,j]
+y =[]
+for i in z:
+    i = len(i)
+    y.append(i)
+
+# %%
+y
+
+# %%
+count = pd.DataFrame()
+
+# %%
+count["no_of_points"] = y
+
+# %%
+count.plot(kind="bar")
 
 # %%
 # with pd.ExcelWriter('yearlydatasplit.xlsx') as writer:
@@ -101,13 +124,13 @@ j = data[(data["Average energy load"] > minimum +(9*x)) & (data["Average energy 
 # ### Visualization of the Rolling mean over the 8760 values
 
 # %%
-data["Rolling_mean"] = data["Average energy load"].rolling(150).mean()
+data["Rolling_mean"] = data["Total_energy_load"].rolling(150).mean()
 
 # %%
 data.reset_index(inplace = True)
 
 # %%
-plt.plot(data["index"],data["Average energy load"],color ="#ee795d",label = "Average energy load")
+plt.plot(data["index"],data["Total_energy_load"],color ="#ee795d",label = "Total_energy_load")
 plt.plot(data["index"],data["Rolling_mean"],color ="black",label ="Rolling_mean")
 plt.ylim(6000,18000)
 plt.xlim(0,8760)
@@ -135,18 +158,18 @@ data.set_index("timestamp",inplace =True)
 # * data['month'] = data['timestamp'].dt.month
 
 # %%
-month1  = data["2021-07-28 00:00:00 ": "2021-08-31 23:00:00"]["Average energy load"]
-month2  = data["2021-09-01 00:00:00 ": "2021-09-30 23:00:00"]["Average energy load"]
-month3  = data["2021-10-01 00:00:00 ": "2021-10-31 23:00:00"]["Average energy load"]
-month4  = data["2021-11-01 00:00:00 ": "2021-11-30 23:00:00"]["Average energy load"]
-month5  = data["2021-12-01 00:00:00 ": "2021-12-31 23:00:00"]["Average energy load"]
-month6  = data["2022-01-01 00:00:00 ": "2022-01-31 23:00:00"]["Average energy load"]
-month7  = data["2022-02-01 00:00:00 ": "2022-02-28 23:00:00"]["Average energy load"]
-month8  = data["2022-03-01 00:00:00 ": "2022-03-31 23:00:00"]["Average energy load"]
-month9  = data["2022-04-01 00:00:00 ": "2022-04-30 23:00:00"]["Average energy load"]
-month10 = data["2022-05-01 00:00:00 ": "2022-05-31 23:00:00"]["Average energy load"]
-month11  = data["2022-06-01 00:00:00 ": "2022-06-30 23:00:00"]["Average energy load"]
-month12  = data["2022-07-01 00:00:00 ": "2022-07-27 23:00:00"]["Average energy load"]
+month1  = data["2021-07-28 00:00:00 ": "2021-08-31 23:00:00"]["Total_energy_load"]
+month2  = data["2021-09-01 00:00:00 ": "2021-09-30 23:00:00"]["Total_energy_load"]
+month3  = data["2021-10-01 00:00:00 ": "2021-10-31 23:00:00"]["Total_energy_load"]
+month4  = data["2021-11-01 00:00:00 ": "2021-11-30 23:00:00"]["Total_energy_load"]
+month5  = data["2021-12-01 00:00:00 ": "2021-12-31 23:00:00"]["Total_energy_load"]
+month6  = data["2022-01-01 00:00:00 ": "2022-01-31 23:00:00"]["Total_energy_load"]
+month7  = data["2022-02-01 00:00:00 ": "2022-02-28 23:00:00"]["Total_energy_load"]
+month8  = data["2022-03-01 00:00:00 ": "2022-03-31 23:00:00"]["Total_energy_load"]
+month9  = data["2022-04-01 00:00:00 ": "2022-04-30 23:00:00"]["Total_energy_load"]
+month10 = data["2022-05-01 00:00:00 ": "2022-05-31 23:00:00"]["Total_energy_load"]
+month11  = data["2022-06-01 00:00:00 ": "2022-06-30 23:00:00"]["Total_energy_load"]
+month12  = data["2022-07-01 00:00:00 ": "2022-07-27 23:00:00"]["Total_energy_load"]
 
 
 # %%
@@ -195,6 +218,9 @@ month12 = creating_df(month12)
 
 # %% [markdown]
 # ### Manipulating the Solar Data (for each month)
+
+# %% [markdown]
+# ### Need to change the column name
 
 # %%
 # January = pd.read_excel("Solar Load profiles from SAM/Solar load profile January.xlsx")
@@ -332,5 +358,27 @@ month12 = creating_df(month12)
 # plt.style.use("ggplot")
 # plt.savefig("new",dpi=1500)
 # plt.show()
+
+# %% [markdown]
+# ## Monthly split by dt.month
+
+# %% [markdown]
+# ### Jan to Dec
+
+# %%
+January = data[data["Month"]== 1]
+February = data[data["Month"]== 2]
+March = data[data["Month"]== 3]
+April = data[data["Month"]== 4]
+May = data[data["Month"]== 5]
+June = data[data["Month"]== 6]
+July = data[data["Month"]== 7]
+August = data[data["Month"]== 8]
+September = data[data["Month"]== 9]
+October = data[data["Month"]== 10]
+November = data[data["Month"]== 11]
+December = data[data["Month"]== 12]
+
+# %%
 
 # %%
